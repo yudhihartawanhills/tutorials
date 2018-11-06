@@ -7,7 +7,8 @@ var { User } = require('./models/user');
 
 
 var app = express();
-const port = process.env.PORT || 3000;
+//const port = process.env.PORT || 3000;
+const port = 3000;
 
 app.use(bodyParser.json());
 
@@ -46,7 +47,7 @@ app.get('/todos/:id',(req,res)=>{
             if(todo){
                 return res.status(200).send({todo});
             } else{
-                return res.status(404).send({});
+                return res.status(404).send({text:""});
             }
         }).catch((e)=>{
                 res.status(404).send({});
@@ -65,10 +66,10 @@ app.delete('/todos/:id',(req,res)=>{
         console.log("Id is valid");
         Todo.findByIdAndRemove(id).then((result)=>{
             if(result == null){
-                res.status(404).send({message:"id not found"});
-            }else{
-                res.status(202).send({message:"Deleted successfully"});
+                return res.status(404).send({message:"id not found"});
             }
+            console.log(result);
+            res.status(200).send(result);
         }).catch((e)=>{
             res.status(404).send({});
         })
